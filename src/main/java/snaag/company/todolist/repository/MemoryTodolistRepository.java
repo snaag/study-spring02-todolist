@@ -4,7 +4,7 @@ import snaag.company.todolist.domain.TodoItem;
 
 import java.util.*;
 
-public class TodolistMemoryRepository implements TodolistRepository {
+public class MemoryTodolistRepository implements TodolistRepository {
     private Map<Long, TodoItem> store = new HashMap<>();
     private Long sequence = 0L;
 

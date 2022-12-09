@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TodolistMemoryRepositoryTest {
 
-    TodolistMemoryRepository todolistMemoryRepository = new TodolistMemoryRepository();
+    MemoryTodolistRepository todolistMemoryRepository = new MemoryTodolistRepository();
 
     @BeforeEach()
     void beforeEach() {
