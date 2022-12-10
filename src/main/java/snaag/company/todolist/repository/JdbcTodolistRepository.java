@@ -5,6 +5,7 @@ import snaag.company.todolist.domain.TodoItem;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,27 +54,147 @@ public class JdbcTodolistRepository implements TodolistRepository {
 
     @Override
     public List<TodoItem> findAll() {
-        return null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "select * from todolist";
+        List<TodoItem> store = new ArrayList<>();
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                TodoItem item = new TodoItem();
+
+                String text = rs.getString("text");
+                Boolean done = rs.getBoolean("done");
+                Long id = rs.getLong("id");
+
+                item.setText(text);
+                item.setId(id);
+                item.setDone(done);
+
+                store.add(item);
+            }
+            return store;
+        } catch(Exception e) {
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
     }
 
     @Override
     public Optional<TodoItem> findById(Long id) {
-        return Optional.empty();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "select * from todolist where id=?";
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+
+            TodoItem item = new TodoItem();
+
+            while(rs.next()) {
+                if(rs.getLong("id") == id) {
+                    item.setId(rs.getLong("id"));
+                    item.setText(rs.getString("text"));
+                    item.setDone(rs.getBoolean("done"));
+                    return Optional.of(item);
+                }
+            }
+            return Optional.empty();
+        } catch(Exception e) {
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
     }
 
     @Override
     public TodoItem update(TodoItem todoItem) {
-        return null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "update todolist set text=?, done=? where id=?";
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, todoItem.getText());
+            pstmt.setBoolean(2, todoItem.getDone());
+            pstmt.setLong(3, todoItem.getId());
+
+            pstmt.executeUpdate();
+            rs = pstmt.getGeneratedKeys();
+
+            TodoItem item = new TodoItem();
+
+            while(rs.next()) {
+                item.setText(rs.getString("text"));
+                item.setId(rs.getLong("id"));
+                item.setDone(rs.getBoolean("done"));
+
+                break;
+            }
+
+            return item;
+        } catch(Exception e) {
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
     }
 
     @Override
     public void delete(Long id) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
+        String sql = "delete from todolist where id=?";
+
+        try {
+            conn = getConnection();
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, id);
+
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, null);
+        }
     }
 
     @Override
     public void clear() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
+        String sql = "truncate table todolist";
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+
+        } finally {
+            close(conn, pstmt, null);
+        }
     }
 
     private Connection getConnection() {
