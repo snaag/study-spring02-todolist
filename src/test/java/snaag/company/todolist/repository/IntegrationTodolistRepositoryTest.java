@@ -22,7 +22,7 @@ class IntegrationTodolistRepositoryTest {
     void save() {
         TodoItem item1 = new TodoItem();
         item1.setText("cat cute");
-        item1.setDone(false);
+        item1.setDone(true);
 
         TodoItem result = todolistRepository.save(item1);
         assertThat(result.getText()).isEqualTo("cat cute");

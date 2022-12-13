@@ -103,13 +103,11 @@ public class JdbcTodolistRepository implements TodolistRepository {
 
             TodoItem item = new TodoItem();
 
-            while(rs.next()) {
-                if(rs.getLong("id") == id) {
-                    item.setId(rs.getLong("id"));
-                    item.setText(rs.getString("text"));
-                    item.setDone(rs.getBoolean("done"));
-                    return Optional.of(item);
-                }
+            if(rs.next()) {
+                item.setId(rs.getLong("id"));
+                item.setText(rs.getString("text"));
+                item.setDone(rs.getBoolean("done"));
+                return Optional.of(item);
             }
             return Optional.empty();
         } catch(Exception e) {
@@ -140,12 +138,10 @@ public class JdbcTodolistRepository implements TodolistRepository {
 
             TodoItem item = new TodoItem();
 
-            while(rs.next()) {
+            if (rs.next()) {
                 item.setText(rs.getString("text"));
                 item.setId(rs.getLong("id"));
                 item.setDone(rs.getBoolean("done"));
-
-                break;
             }
 
             return item;
