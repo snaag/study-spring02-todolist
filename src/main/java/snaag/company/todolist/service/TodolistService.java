@@ -15,32 +15,32 @@ public class TodolistService {
     }
 
 //    create
-    private TodoItem create(TodoItem todoItem) {
+    public TodoItem create(TodoItem todoItem) {
         return todolistRepository.save(todoItem);
     }
 
 //    retrieve (all)
-    private List<TodoItem> getAll() {
+    public List<TodoItem> getAll() {
         return todolistRepository.findAll();
     }
 
 //    retrieve (byId)
-    private Optional<TodoItem> getById(Long id) {
+    public Optional<TodoItem> getById(Long id) {
         return todolistRepository.findById(id);
     }
 
 //    update
-    private TodoItem update(TodoItem todoItem) {
+    public TodoItem update(TodoItem todoItem) {
         return todolistRepository.update(todoItem);
     }
 
 //    clear
-    private void deleteById(Long id) {
+    public void deleteById(Long id) {
         todolistRepository.delete(id);
     }
 
 //    delete
-    private void clear() {
+    public void clear() {
         todolistRepository.clear();
     }
 
