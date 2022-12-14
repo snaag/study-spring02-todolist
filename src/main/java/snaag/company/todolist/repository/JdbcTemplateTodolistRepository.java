@@ -54,7 +54,11 @@ public class JdbcTemplateTodolistRepository implements TodolistRepository {
 
     @Override
     public TodoItem update(TodoItem todoItem) {
-        return null;
+        // update 에 성공하면 1, 실패하면 0
+        jdbcTemplate.update("update todolist set text=?, done=? where id=?",
+                todoItem.getText(), todoItem.getDone(), todoItem.getId());
+
+        return todoItem;
     }
 
     @Override
