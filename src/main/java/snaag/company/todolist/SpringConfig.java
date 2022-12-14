@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import snaag.company.todolist.repository.JdbcTemplateTodolistRepository;
 import snaag.company.todolist.repository.JdbcTodolistRepository;
 import snaag.company.todolist.repository.TodolistRepository;
+import snaag.company.todolist.service.TodolistService;
 
 import javax.sql.DataSource;
 
@@ -23,6 +24,11 @@ public class SpringConfig {
 //        return new MemoryTodolistRepository();
 //        return new JdbcTodolistRepository(dataSource);
         return new JdbcTemplateTodolistRepository(dataSource);
+    }
+
+    @Bean
+    public TodolistService todolistService() {
+        return new TodolistService(todolistRepository());
     }
 
 }
