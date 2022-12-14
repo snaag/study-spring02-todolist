@@ -9,10 +9,41 @@
     <h1>🏠 메인 페이지</h1>
     <h3 th:text="${data}">현재 시간</h3>
 
-    <form action="POST">
-        <input type="text">
+    <form action="/create" method="post">
+        <input name="text" type="text">
         <button type="submit">추가</button>
     </form>
+
+    <div class="container">
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>done</th>
+                    <th>text</th>
+                    <th>save</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${todolist}">
+                    <form method="post" action="update">
+                        <td>
+                            <input readonly type="text" name="id" th:value="${item.getId()}"/>
+                        </td>
+                        <td>
+                            <input name="done" type="checkbox" th:checked="${item.getDone()}" th:value="${item.getDone()}"/>
+                        </td>
+                        <td>
+                            <input name="text" type="text" th:value="${item.getText()}"/>
+                        </td>
+                        <td><input type="submit"/></td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> <!-- /container -->
 </div>
 </body>
 </html>
