@@ -26,7 +26,7 @@ public class JdbcTemplateTodolistRepository implements TodolistRepository {
 //        parameter 만들기 (HashMap)
         HashMap<String, Object> parameter = new HashMap<>();
         parameter.put("text", todoItem.getText());
-        parameter.put("done", todoItem.getDone());
+        parameter.put("done", false);
 
 //        jdbcInsert 에 Parameter 넣고 쿼리 실행하기
         Number id = jdbcInsert.executeAndReturnKey(parameter);
